@@ -625,37 +625,3 @@ AddEventHandler('txAdmin:events:scheduledRestart', function(eventData)
 		end)
 	end
 end)
-
-RegisterServerEvent('StJobs:DutyOn') 
-AddEventHandler('StJobs:DutyOn', function()
-	local xPlayer = ESX.GetPlayerFromId(source)
-
-	local plyJob = xPlayer.job.name
-	local plyJobPrefix = string.sub(plyJob, 0, 3)
-	local newJob
-
-
-	if plyJobPrefix == 'off' then
-		newJob = plyJob:gsub('off', '') --> offpolice : police
-	else
-		newJob = plyJob
-	end
-
-	xPlayer.setJob(newJob, xPlayer.job.grade)
-end)
-
-RegisterServerEvent('StJobs:DutyOff') 
-AddEventHandler('StJobs:DutyOff', function()
-	local xPlayer = ESX.GetPlayerFromId(source)
-	local plyJob = xPlayer.job.name
-	local plyJobPrefix = string.sub(plyJob, 0, 3)
-	local newJob
-
-	if plyJobPrefix == 'off' then
-		newJob = plyJob
-	else
-		newJob = 'off' .. plyJob
-	end
-
-	xPlayer.setJob(newJob, xPlayer.job.grade)
-end)
