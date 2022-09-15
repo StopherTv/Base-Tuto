@@ -105,7 +105,6 @@ function OpenCloakroomMenu()
 							msg      = _U('service_out_announce', GetPlayerName(PlayerId())),
 							iconType = 1
 						}
-						TriggerServerEvent('StJobs:DutyOff')
 						TriggerServerEvent('esx_service:notifyAllInService', notification, 'police')
 						TriggerServerEvent('esx_service:disableService', 'police')
 						TriggerEvent('esx_policejob:updateBlip')
@@ -135,7 +134,6 @@ function OpenCloakroomMenu()
 									msg      = _U('service_in_announce', GetPlayerName(PlayerId())),
 									iconType = 1
 								}
-								TriggerServerEvent('StJobs:DutyOn')
 								TriggerServerEvent('esx_service:notifyAllInService', notification, 'police')
 								TriggerEvent('esx_policejob:updateBlip')
 								ESX.ShowNotification(_U('service_in'))
@@ -151,7 +149,6 @@ function OpenCloakroomMenu()
 							msg      = _U('service_in_announce', GetPlayerName(PlayerId())),
 							iconType = 1
 						}
-						TriggerServerEvent('StJobs:DutyOn')
 						TriggerServerEvent('esx_service:notifyAllInService', notification, 'police')
 						TriggerEvent('esx_policejob:updateBlip')
 						ESX.ShowNotification(_U('service_in'))
@@ -204,10 +201,10 @@ end
 
 function OpenArmoryMenu(station)
 	local elements
-	--if Config.OxInventory then
-		--exports.ox_inventory:openInventory('stash', {id = 'society_police', owner = station})
-		--return ESX.UI.Menu.CloseAll()
-	--else
+	if Config.OxInventory then
+		exports.ox_inventory:openInventory('stash', {id = 'society_police', owner = station})
+		return ESX.UI.Menu.CloseAll()
+	else
 		elements = {
 			{label = _U('buy_weapons'), value = 'buy_weapons'}
 		}
@@ -1260,21 +1257,18 @@ CreateThread(function()
 			local currentStation, currentPart, currentPartNum
 			
 			for k,v in pairs(Config.PoliceStations) do
-				if ESX.PlayerData.job.name == 'police' or ESX.PlayerData.job.name == 'offpolice' then
-					for i=1, #v.Cloakrooms, 1 do
-						local distance = #(playerCoords - v.Cloakrooms[i])
+				for i=1, #v.Cloakrooms, 1 do
+					local distance = #(playerCoords - v.Cloakrooms[i])
 
-						if distance < Config.DrawDistance then
-							DrawMarker(Config.MarkerType.Cloakrooms, v.Cloakrooms[i], 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 1.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-							letSleep = false
+					if distance < Config.DrawDistance then
+						DrawMarker(Config.MarkerType.Cloakrooms, v.Cloakrooms[i], 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 1.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
+						letSleep = false
 
-							if distance < Config.MarkerSize.x then
-								isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Cloakroom', i
-							end
+						if distance < Config.MarkerSize.x then
+							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Cloakroom', i
 						end
 					end
 				end
-				if ESX.PlayerData.job.name == 'police' then
 				--for i=1, #v.Armories, 1 do
 					--local distance = #(playerCoords - v.Armories[i])
 
@@ -1352,7 +1346,6 @@ CreateThread(function()
 							end
 						end
 					end
-				end
 				end
 			end
 
@@ -1442,7 +1435,7 @@ CreateThread(function()
 		if CurrentAction then
 			ESX.ShowHelpNotification(CurrentActionMsg)
 
-			if IsControlJustReleased(0, 38) and ESX.PlayerData.job and (ESX.PlayerData.job.name == 'police' or ESX.PlayerData.job.name == 'offpolice') then
+			if IsControlJustReleased(0, 38) and ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
 
 				if CurrentAction == 'menu_cloakroom' then
 					OpenCloakroomMenu()
