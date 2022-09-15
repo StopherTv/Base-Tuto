@@ -164,19 +164,9 @@ function ESX.TriggerServerCallback(name, requestId, source, cb, ...)
 end
 
 function Core.SavePlayer(xPlayer, cb)
-	local plyJob = xPlayer.job.name 
-	local plyJobPrefix = string.sub(plyJob, 0, 3)
-	local newJob
-
-	if plyJobPrefix == 'off' or plyJob == 'unemployed' then
-		newJob = plyJob
-	else
-		newJob = 'off' .. plyJob   --> police : offpolice
-	end
-
 	MySQL.prepare('UPDATE `users` SET `accounts` = ?, `job` = ?, `job_grade` = ?, `job2` = ?, `job2_grade` = ?, `group` = ?, `position` = ?, `inventory` = ?, `loadout` = ? WHERE `identifier` = ?', {
 		json.encode(xPlayer.getAccounts(true)),
-		newJob,
+		xPlayer.job2.name,
 		xPlayer.job.grade,
 		xPlayer.job2.name,
 		xPlayer.job2.grade,
@@ -201,19 +191,9 @@ function Core.SavePlayers(cb)
 		local time = os.time()
 		for i=1, count do
 			local xPlayer = xPlayers[i]
-			local plyJob = xPlayer.job.name 
-			local plyJobPrefix = string.sub(plyJob, 0, 3)
-			local newJob
-
-			if plyJobPrefix == 'off' or plyJob == 'unemployed' then
-				newJob = plyJob
-			else
-				newJob = 'off' .. plyJob   --> police : offpolice
-			end
-			
 			parameters[#parameters+1] = {
 				json.encode(xPlayer.getAccounts(true)),
-				newJob,
+				xPlayer.job.name,
 				xPlayer.job.grade,
 				xPlayer.job2.name,
 				xPlayer.job2.grade,
