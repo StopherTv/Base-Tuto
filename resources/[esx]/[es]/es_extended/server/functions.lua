@@ -166,7 +166,7 @@ end
 function Core.SavePlayer(xPlayer, cb)
 	MySQL.prepare('UPDATE `users` SET `accounts` = ?, `job` = ?, `job_grade` = ?, `job2` = ?, `job2_grade` = ?, `group` = ?, `position` = ?, `inventory` = ?, `loadout` = ? WHERE `identifier` = ?', {
 		json.encode(xPlayer.getAccounts(true)),
-		xPlayer.job2.name,
+		xPlayer.job.name,
 		xPlayer.job.grade,
 		xPlayer.job2.name,
 		xPlayer.job2.grade,
